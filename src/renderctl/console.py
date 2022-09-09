@@ -1,9 +1,15 @@
+import json
+
 import click
 from rich.table import Table
 from rich.console import Console
+
+import renderctl.render_services
 from renderctl.render_services import fetch_services, retrieve_env_from_render
 
-from . import __version__
+# from . import __version__
+
+__version__ = 3.4
 
 
 @click.group()
@@ -16,32 +22,62 @@ def cli():
 def list_services(table):
     data = fetch_services()
     if table:
-        table = Table(title="Services")
-        table.add_column("Name")
-        table.add_column("Service Id")
-        table.add_column("URL")
+        tb = Table(title="Services")
+        tb.add_column("Name")
+        tb.add_column("Service Id")
+        tb.add_column("URL")
         for service in data:
             svc = service['service']
             s_name = svc['name']
             s_id = svc['id']
             s_url = svc['serviceDetails']['url']
-            table.add_row(s_name, s_id, s_url)
+            tb.add_row(s_name, s_id, s_url)
         console = Console()
-        console.print(table)
+        console.print(tb)
     else:
-        click.echo(data)
+        click.echo(json.dumps(data, indent=4))
 
 
-@cli.command()
+@cli.command('set-env')
+@click.option('-f', '--file', type=str, help='File to load env vars from')
+def set_env(file):
+    env_vars = {}
+    with open(file) as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            else:
+                var, value = parse_env_file(line)
+                env_vars[var] = value
+    for k, v in env_vars.items():
+        click.echo(f"{k} = {v}")
+
+
+@cli.command('list-env')
 @click.option('-sn', '--service-name', type=str, help='Render service name')
-def env(service_name):
-    click.echo(retrieve_env_from_render(service_name))
+@click.option('--table', is_flag=True)
+def list_env(service_name, table):
+    data = retrieve_env_from_render(service_name)
+    if table:
+        tb = Table(title="Env Vars")
+        tb.add_column("Name")
+        tb.add_column("Value")
+        for item in data:
+            name = item['envVar']['key']
+            value = item['envVar']['value']
+            tb.add_row(name, value)
+        console = Console()
+        console.print(tb)
+    else:
+        click.echo(json.dumps(data, indent=4))
 
 
 @cli.command()
 @click.option('-sn', '--service-name', type=str, help='Deploys named service')
 def deploy(service_name):
-    click.echo(deploy(service_name))
+    result = renderctl.render_services.deploy_service(service_name)
+    click.echo(json.dumps(result, indent=4))
 
 
 @cli.command()
@@ -50,5 +86,12 @@ def main():
     click.echo("renderctl")
 
 
+def parse_env_file(input):
+    var, value = input.split('=')
+    var = var.strip()
+    value = value.strip()
+    return var, value
+
+
 if __name__ == '__main__':
-    main()
+    set_env(['--file', '../../envvars'])

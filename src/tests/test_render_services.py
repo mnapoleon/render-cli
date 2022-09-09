@@ -1,27 +1,24 @@
 import json
+import unittest
 
 import pytest
+from unittest.mock import patch, MagicMock
 
 from renderctl.render_services import fetch_services
-import renderctl.render_services
 
+services = [{
+            "cursor": "eMHLdAJXBHZqcmhncDNqcW5sMHF1Z29n",
+            "service": {"id": "srv-cc3vjrhgp3jqnl0qugog",
+                        "name": "test-service-name"}
+        }
+        ]
+class TestRenderServices(unittest.TestCase):
 
-@pytest.fixture()
-def fake_render_services():
-    with open("fetch_services.json") as f:
-        return json.load(f)
-
-
-@pytest.fixture
-def mock_requests_get(mocker):
-    fake_resp = mocker.Mock()
-    fake_resp.json = mocker.Mock(return_value=fake_render_services)
-    # fake_resp.status_code = HTTPStatus.OK
-
-    mock = mocker.patch("fetch_services.requests.get", return_value=fake_resp)
-    return mock
-
-
-def test_get_requests(mock_requests_get):
-    result = renderctl.render_services.fetch_services()
-    assert "svc-1234566" == result["service"]["id"]
+    @patch('renderctl.render_services.requests')
+    def test_get_requests(self, mock_requests):
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = services
+        mock_requests.get.return_value = mock_response
+        result = fetch_services()
+        self.assertEqual(services, result)
