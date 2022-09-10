@@ -1,27 +1,30 @@
 import json
-
-import pytest
+import unittest
+from unittest.mock import patch, MagicMock
 
 from renderctl.render_services import fetch_services
-import renderctl.render_services
 
 
-@pytest.fixture()
-def fake_render_services():
-    with open("fetch_services.json") as f:
-        return json.load(f)
+class TestRenderServices(unittest.TestCase):
 
+    @patch('renderctl.render_services.requests')
+    def test_get_requests(self, mock_requests):
 
-@pytest.fixture
-def mock_requests_get(mocker):
-    fake_resp = mocker.Mock()
-    fake_resp.json = mocker.Mock(return_value=fake_render_services)
-    # fake_resp.status_code = HTTPStatus.OK
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = [{
+            "cursor": "eMHLdAJXBHZqcmhncDNqcW5sMHF1Z29n",
+            "service": {
+                "id": "srv-cc3vjrhgp3jqnl0xxxxx",
+                "name": "render-service-name",
+                "serviceDetails": {
+                    "url": "https://render-service-name.onrender.com"
+                }
+            }
+        }]
+        mock_requests.get.return_value.__enter__.return_value = mock_response
 
-    mock = mocker.patch("fetch_services.requests.get", return_value=fake_resp)
-    return mock
+        result = fetch_services()
+        s_id = result[0]['service']['id']
+        assert "srv-cc3vjrhgp3jqnl0xxxxx" == s_id
 
-
-def test_get_requests(mock_requests_get):
-    result = renderctl.render_services.fetch_services()
-    assert "svc-1234566" == result["service"]["id"]
