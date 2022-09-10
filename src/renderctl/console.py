@@ -1,12 +1,11 @@
 import json
 
 import click
-from rich.table import Table
 from rich.console import Console
 from renderctl.render_services import fetch_services, retrieve_env_from_render, deploy_service
+from renderctl.output.services_output import output_services_as_table, output_env_vars_as_table
+from . import __version__
 
-#from . import __version__
-__version__  = "3.4"
 
 @click.group()
 def cli():
@@ -14,24 +13,15 @@ def cli():
 
 
 @cli.command('list')
-@click.option('--table', is_flag=True)
-def list_services(table):
+@click.option('-v', '--verbose', is_flag=True, help='Display full json output from render api call.')
+def list_services(verbose):
     data = fetch_services()
-    if table:
-        tb = Table(title="Services")
-        tb.add_column("Name")
-        tb.add_column("Service Id")
-        tb.add_column("URL")
-        for service in data:
-            svc = service['service']
-            s_name = svc['name']
-            s_id = svc['id']
-            s_url = svc['serviceDetails']['url']
-            tb.add_row(s_name, s_id, s_url)
-        console = Console()
-        console.print(tb)
-    else:
+    if verbose:
         click.echo(json.dumps(data, indent=4))
+    else:
+        console = Console()
+        click.echo("\n")
+        console.print(output_services_as_table(data))
 
 
 @cli.command('set-env')
@@ -51,28 +41,22 @@ def set_env(file):
 
 
 @cli.command('list-env')
-@click.option('-sn', '--service-name', type=str, help='Render service name')
-@click.option('--table', is_flag=True)
-def list_env(service_name, table):
-    data = retrieve_env_from_render(service_name)
-    if table:
-        tb = Table(title="Env Vars")
-        tb.add_column("Name")
-        tb.add_column("Value")
-        for item in data:
-            name = item['envVar']['key']
-            value = item['envVar']['value']
-            tb.add_row(name, value)
-        console = Console()
-        console.print(tb)
-    else:
+@click.option('-sid', '--service-id', type=str, help='Render service name')
+@click.option('-v', '--verbose', is_flag=True)
+def list_env(service_id, verbose):
+    data = retrieve_env_from_render(service_id)
+    if verbose:
         click.echo(json.dumps(data, indent=4))
+    else:
+        console = Console()
+        click.echo("\n")
+        console.print(output_env_vars_as_table(data))
 
 
 @cli.command()
-@click.option('-sn', '--service-name', type=str, help='Deploys named service')
-def deploy(service_name):
-    result = deploy_service(service_name)
+@click.option('-sid', '--service-id', type=str, help='Deploys named service')
+def deploy(service_id):
+    result = deploy_service(service_id)
     click.echo(json.dumps(result, indent=4))
 
 
@@ -82,7 +66,7 @@ def main():
     click.echo("renderctl")
 
 
-def parse_env_file(input):
+def parse_env_file(input_data):
     var, value = input.split('=')
     var = var.strip()
     value = value.strip()
