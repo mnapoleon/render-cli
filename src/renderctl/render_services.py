@@ -6,6 +6,7 @@ RENDER_API_BASE_URL = 'https://api.render.com/v1/services'
 
 APPLICATION_JSON = 'application/json'
 
+
 def get_bearer_token():
     return os.getenv('RENDER_TOKEN')
 

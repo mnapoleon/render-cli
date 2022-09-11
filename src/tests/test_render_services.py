@@ -1,11 +1,11 @@
-import json
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, MagicMock, Mock
 
 from renderctl.render_services import fetch_services, create_headers
 
 
 class TestRenderServices(unittest.TestCase):
+
 
     @patch('renderctl.render_services.requests')
     def test_get_requests(self, mock_requests):

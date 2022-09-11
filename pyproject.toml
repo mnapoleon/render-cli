@@ -29,7 +29,7 @@ source = ["renderctl"]
 
 [tool.coverage.report]
 show_missing = true
-fail_under = 100
+fail_under = 40
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
