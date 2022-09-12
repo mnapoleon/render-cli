@@ -2,7 +2,8 @@ import json
 
 import click
 from rich.console import Console
-from renderctl.render_services import fetch_services, retrieve_env_from_render, deploy_service
+from renderctl.render_services import \
+    fetch_services, retrieve_env_from_render, deploy_service, find_service_by_name
 from renderctl.output.services_output import output_services_as_table, output_env_vars_as_table
 from . import __version__
 
@@ -22,6 +23,13 @@ def list_services(verbose):
         console = Console()
         click.echo("\n")
         console.print(output_services_as_table(data))
+
+
+@cli.command('find-service')
+@click.option('-sn', '--service-name', type=str, help='Find service by name')
+def find_service(service_name):
+    data = find_service_by_name(service_name)
+    click.echo(json.dumps(data, indent=4))
 
 
 @cli.command('set-env')
@@ -74,4 +82,4 @@ def parse_env_file(input_data):
 
 
 if __name__ == '__main__':
-    list_env(['-sn', 'srv-cc3vjrhgp3jqnl0qugog', '--table'])
+    main()
