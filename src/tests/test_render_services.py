@@ -44,6 +44,12 @@ class TestRenderServices(unittest.TestCase):
         assert result[2] == test_constants.test_env_var_3
         assert result[3] == test_constants.test_env_var_4
 
+    @patch('renderctl.render_services.requests')
+    def test_failure_retrieve_env_from_render(self, mock_requests):
+        mock_response = MagicMock()
+        mock_response.status_code = 401
+        mock_requests.get.return_value.__enter__.return_value = mock_response
+        result = retrieve_env_from_render('service-id')
 
     @patch('renderctl.render_services.os')
     def test_create_headers(self, mock_os):
