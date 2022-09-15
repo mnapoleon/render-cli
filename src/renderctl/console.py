@@ -5,8 +5,8 @@ from rich.console import Console
 from renderctl.render_services import \
     fetch_services, retrieve_env_from_render, deploy_service, find_service_by_name
 from renderctl.output.services_output import output_services_as_table, output_env_vars_as_table
-from . import __version__
-
+#from . import __version__
+__version__ = "3.4"
 
 @click.group()
 def cli():
@@ -49,9 +49,16 @@ def set_env(file):
 
 
 @cli.command('list-env')
-@click.option('-sid', '--service-id', type=str, help='Render service name')
+@click.option('-sid', '--service-id', type=str, help='Render service id')
+@click.option('-sn', '--service-name', type=str, help='Render service name')
 @click.option('-v', '--verbose', is_flag=True)
-def list_env(service_id, verbose):
+def list_env(service_id, service_name, verbose):
+    if not service_id:
+        if service_name:
+            service_id = find_service_by_name(service_name)['service']['id']
+        else:
+            click.echo("Need to provide service id or service name options")
+            exit()
     data = retrieve_env_from_render(service_id)
     if verbose:
         click.echo(json.dumps(data, indent=4))
@@ -82,4 +89,5 @@ def parse_env_file(input_data):
 
 
 if __name__ == '__main__':
-    main()
+    #main()
+    list_env([])
