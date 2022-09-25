@@ -1,3 +1,5 @@
+import responses
+from renderctl.render_services import RENDER_API_BASE_URL
 
 test_svc_1 = {
             "cursor": "eMHLdAJXBHZqcmhncDNqcW5sMHF1Z29n",
@@ -34,6 +36,13 @@ test_svc_3 = {
 
 test_services = [test_svc_1, test_svc_2, test_svc_3]
 
+fetch_services_response = responses.Response(
+    method="GET",
+    url=RENDER_API_BASE_URL,
+    json=test_services,
+    status=200,
+)
+
 test_env_var_1 = {
         "envVar": {
             "key": "APP_VER",
@@ -67,3 +76,10 @@ test_env_var_4 = {
     }
 
 test_env_vars = [test_env_var_1, test_env_var_2, test_env_var_3, test_env_var_4]
+
+retrieve_env_vars_response = responses.Response(
+    method="GET",
+    url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
+    json=test_env_vars,
+    status=200,
+)

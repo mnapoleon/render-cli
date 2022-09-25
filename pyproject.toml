@@ -20,6 +20,9 @@ pytest-mock = "^3.8.2"
 [tool.poetry.scripts]
 renderctl="renderctl.console:cli"
 
+[tool.poetry.group.dev.dependencies]
+responses = "^0.21.0"
+
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
 
