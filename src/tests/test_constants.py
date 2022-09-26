@@ -43,6 +43,42 @@ fetch_services_response = responses.Response(
     status=200,
 )
 
+fetch_services_failed_with_401 = responses.Response(
+    method="GET",
+    url=RENDER_API_BASE_URL,
+    status=401,
+)
+
+fetch_services_failed_with_406 = responses.Response(
+    method="GET",
+    url=RENDER_API_BASE_URL,
+    status=406,
+)
+
+fetch_services_failed__with_429 = responses.Response(
+    method="GET",
+    url=RENDER_API_BASE_URL,
+    status=429,
+)
+
+fetch_services_failed__with_500 = responses.Response(
+    method="GET",
+    url=RENDER_API_BASE_URL,
+    status=500,
+)
+
+fetch_services_failed__with_503 = responses.Response(
+    method="GET",
+    url=RENDER_API_BASE_URL,
+    status=503,
+)
+
+fetch_services_failed__with_402 = responses.Response(
+    method="GET",
+    url=RENDER_API_BASE_URL,
+    status=402,
+)
+
 test_env_var_1 = {
         "envVar": {
             "key": "APP_VER",
@@ -82,4 +118,10 @@ retrieve_env_vars_response = responses.Response(
     url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
     json=test_env_vars,
     status=200,
+)
+
+retrieve_env_vars_failed_with_401 = responses.Response(
+    method="GET",
+    url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
+    status=401,
 )
