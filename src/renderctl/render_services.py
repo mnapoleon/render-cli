@@ -1,25 +1,24 @@
-import requests
-from requests import HTTPError
 import os
 
 
-RENDER_API_BASE_URL = 'https://api.render.com/v1/services'
+import requests
+from requests import HTTPError
 
-APPLICATION_JSON = 'application/json'
+
+RENDER_API_BASE_URL = "https://api.render.com/v1/services"
+
+APPLICATION_JSON = "application/json"
 
 
 def get_bearer_token():
-    return os.getenv('RENDER_TOKEN')
+    return os.getenv("RENDER_TOKEN")
 
 
 def create_headers(is_post: bool = False):
     bearer = f"Bearer {get_bearer_token()}"
-    headers = {
-        "Accept": APPLICATION_JSON,
-        "Authorization": bearer
-    }
+    headers = {"Accept": APPLICATION_JSON, "Authorization": bearer}
     if is_post:
-        headers['Content-Type'] = APPLICATION_JSON
+        headers["Content-Type"] = APPLICATION_JSON
     return headers
 
 
@@ -57,9 +56,9 @@ def find_service_by_name(service_name: str):
     cursor = None
     while True:
         for svc_listing in data:
-            service = svc_listing['service']
-            cursor = svc_listing['cursor']
-            if service['name'] == service_name:
+            service = svc_listing["service"]
+            cursor = svc_listing["cursor"]
+            if service["name"] == service_name:
                 resulting_service = svc_listing
                 found = True
                 break
@@ -73,12 +72,12 @@ def find_service_by_name(service_name: str):
 
 def handle_errors(status_code):
     if status_code == 401:
-        return {'error': '401 - Unauthorized'}
+        return {"error": "401 - Unauthorized"}
     elif status_code == 406:
-        return {'error': '406 - request error'}
+        return {"error": "406 - request error"}
     elif status_code == 429:
-        return {'error': '429 - Exceeded service limit'}
+        return {"error": "429 - Exceeded service limit"}
     elif status_code == 500 or status_code == 503:
-        return {'error': f'{status_code} - Render service unavailable'}
+        return {"error": f"{status_code} - Render service unavailable"}
     else:
-        return{'error': f'{status_code} - unexpected error'}
+        return {"error": f"{status_code} - unexpected error"}

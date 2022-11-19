@@ -6,17 +6,17 @@ SERVICE_NAME_COL_HEADER = "Name"
 SERVICES_ID_COL_HEADER = "Id"
 SERVICES_URL_COL_HEADER = "Url"
 
-services_columns = [SERVICE_NAME_COL_HEADER,
-                    SERVICES_ID_COL_HEADER,
-                    SERVICES_URL_COL_HEADER]
+services_columns = [
+    SERVICE_NAME_COL_HEADER,
+    SERVICES_ID_COL_HEADER,
+    SERVICES_URL_COL_HEADER,
+]
 
 ENV_VARS_TABLE_TITLE = "ENVIRONMENT VARIABLES"
 ENV_VARS_NAME_COL_HEADER = "Name"
 ENV_VARS_VALUE_COL_HEADER = "Value"
 
-env_vars_columns = [
-    ENV_VARS_NAME_COL_HEADER,
-    ENV_VARS_VALUE_COL_HEADER]
+env_vars_columns = [ENV_VARS_NAME_COL_HEADER, ENV_VARS_VALUE_COL_HEADER]
 
 
 def output_services_as_table(data):
@@ -24,9 +24,9 @@ def output_services_as_table(data):
     for header in services_columns:
         tb.add_column(header)
     for item in data:
-        service = item['service']
-        service_details = service['serviceDetails']
-        tb.add_row(service['name'], service['id'], service_details['url'])
+        service = item["service"]
+        service_details = service["serviceDetails"]
+        tb.add_row(service["name"], service["id"], service_details["url"])
     return tb
 
 
@@ -35,6 +35,6 @@ def output_env_vars_as_table(data):
     for header in env_vars_columns:
         tb.add_column(header)
     for item in data:
-        env_var = item['envVar']
-        tb.add_row(env_var['key'], env_var['value'])
+        env_var = item["envVar"]
+        tb.add_row(env_var["key"], env_var["value"])
     return tb
