@@ -1,6 +1,7 @@
 [flake8]
-select = B,B9,BLK,C,E,F,I,W
+select = B,B9,BLK,C,D,E,F,I,W
 ignore = E203,E501,W503
 max-line-length = 88
 application-import-names = renderctl
 import-order-style = google
+docstring-convention = google

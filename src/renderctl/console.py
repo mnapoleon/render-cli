@@ -1,4 +1,6 @@
+"""Render Command-line interface."""
 import json
+from typing import Any
 
 
 import click
@@ -15,14 +17,13 @@ from renderctl.render_services import (
     find_service_by_name,
     retrieve_env_from_render,
 )
-
-
-# from . import __version__
-__version__ = "3.4"
+from . import __version__
 
 
 @click.group()
-def cli():
+@click.version_option(version=__version__)
+def cli() -> None:
+    """A cli to manage your Render services."""
     pass
 
 
@@ -33,7 +34,14 @@ def cli():
     is_flag=True,
     help="Display full json output from render api call.",
 )
-def list_services(verbose):
+def list_services(verbose) -> Any:
+    """Returns a list of all services associated with your Render account.
+
+    Args:
+        verbose: option to return a formatted json dump of all services
+            instead of the default table view which just displays the
+            service name, service id and service url.
+    """
     data = fetch_services()
     if verbose:
         click.echo(json.dumps(data, indent=4))
@@ -45,7 +53,14 @@ def list_services(verbose):
 
 @cli.command("find-service")
 @click.option("-sn", "--service-name", type=str, help="Find service by name")
-def find_service(service_name):
+def find_service(service_name) -> Any:
+    """Finds a Render service by name.
+
+    Returns information about service if found.
+
+    Args:
+        service_name: name of service to search for.
+    """
     data = find_service_by_name(service_name)
     click.echo(json.dumps(data, indent=4))
 
@@ -53,6 +68,12 @@ def find_service(service_name):
 @cli.command("set-env")
 @click.option("-f", "--file", type=str, help="File to load env vars from")
 def set_env(file):
+    """Will set environment variables for the specified service.
+
+    Args:
+        file: path to file containing the environment variables to set.
+
+    """
     env_vars = {}
     with open(file) as f:
         for line in f:
@@ -60,8 +81,8 @@ def set_env(file):
             if not line or line.startswith("#"):
                 continue
             else:
-                var, value = parse_env_file(line)
-                env_vars[var] = value
+                var, value = line.split("=")
+                env_vars[var.strip()] = value.strip()
     for k, v in env_vars.items():
         click.echo(f"{k} = {v}")
 
@@ -69,8 +90,26 @@ def set_env(file):
 @cli.command("list-env")
 @click.option("-sid", "--service-id", type=str, help="Render service id")
 @click.option("-sn", "--service-name", type=str, help="Render service name")
-@click.option("-v", "--verbose", is_flag=True)
+@click.option(
+    "-v",
+    "--verbose",
+    is_flag=True,
+    help="Display full json output from render api call.",
+)
 def list_env(service_id, service_name, verbose):
+    """Fetches list of environment variables of a service.
+
+    Returns and lists the environment variables associated with
+        the passed in service id or service name.  Verbose mode
+        will display json.
+
+    Args:
+        service_id: id of service whose environment variables to find.
+        service_name: name of service whose environment variables to find.
+        verbose: option to return a formatted json dump of all environment
+            variable information.
+
+    """
     if not service_id:
         if service_name:
             service_id = find_service_by_name(service_name)["service"]["id"]
@@ -89,23 +128,11 @@ def list_env(service_id, service_name, verbose):
 @cli.command()
 @click.option("-sid", "--service-id", type=str, help="Deploys named service")
 def deploy(service_id):
+    """Will deploy a service to Render...maybe.
+
+    Args:
+        service_id: id of service to deploy.
+
+    """
     result = deploy_service(service_id)
     click.echo(json.dumps(result, indent=4))
-
-
-@cli.command()
-@click.version_option(version=__version__)
-def main():
-    click.echo("renderctl")
-
-
-def parse_env_file(input_data):
-    var, value = input.split("=")
-    var = var.strip()
-    value = value.strip()
-    return var, value
-
-
-if __name__ == "__main__":
-    # main()
-    list_env([])

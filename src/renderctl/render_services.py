@@ -1,4 +1,6 @@
+"""Proivdes basic client to the Render API."""
 import os
+from typing import Any, Optional
 
 
 import requests
@@ -10,11 +12,26 @@ RENDER_API_BASE_URL = "https://api.render.com/v1/services"
 APPLICATION_JSON = "application/json"
 
 
-def get_bearer_token():
+def get_bearer_token() -> Optional[str]:
+    """Fetch Render api token from environment variable.
+
+    Returns:
+        returns the Render api token stored in the environment
+        variable named RENDER_TOKEN.
+    """
     return os.getenv("RENDER_TOKEN")
 
 
 def create_headers(is_post: bool = False):
+    """Helper function to create headers for api call.
+
+    Args:
+        is_post: indicator if call is going to be a POST.
+
+    Returns:
+        A set of headers for a Render api call.
+
+    """
     bearer = f"Bearer {get_bearer_token()}"
     headers = {"Accept": APPLICATION_JSON, "Authorization": bearer}
     if is_post:
@@ -22,7 +39,13 @@ def create_headers(is_post: bool = False):
     return headers
 
 
-def retrieve_env_from_render(service_name):
+def retrieve_env_from_render(service_name) -> Any:
+    """Gets environment variables for the specified service.
+
+    Args:
+        service_name: name of service to fetch the environment variables for.
+
+    """
     url = f"{RENDER_API_BASE_URL}/{service_name}/env-vars?limit=20"
     with requests.get(url, headers=create_headers()) as response:
         try:
@@ -33,6 +56,16 @@ def retrieve_env_from_render(service_name):
 
 
 def fetch_services(limit=20, cursor=None):
+    """Gets services associated with Render account.
+
+    This function will fetch all services, upto specified limit
+    for the associated Render account.
+
+    Args:
+        limit: number of services to fetch. Defaults to 20.
+        cursor: indicator passed to Render to fetch next page of results.
+
+    """
     cursor_query_param = f"&cursor={cursor}" if cursor is not None else ""
     url = f"{RENDER_API_BASE_URL}?limit={limit}{cursor_query_param}"
     with requests.get(url, headers=create_headers()) as response:
@@ -44,12 +77,22 @@ def fetch_services(limit=20, cursor=None):
 
 
 def deploy_service(service_name):
+    """Will redeploy specified service."""
     url = f"{RENDER_API_BASE_URL}/{service_name}/deploys"
     with requests.post(url, headers=create_headers(is_post=True)) as response:
         return response.json()
 
 
 def find_service_by_name(service_name: str):
+    """Finds service by name associated with Render account.
+
+    This function will fetch services from Redner and return the
+    service that matches the specified name.
+
+    Args:
+        service_name: name of service to search for.
+
+    """
     data = fetch_services(limit=50)
     found = False
     resulting_service = None
@@ -71,6 +114,7 @@ def find_service_by_name(service_name: str):
 
 
 def handle_errors(status_code):
+    """Helper function to handle errors from the api."""
     if status_code == 401:
         return {"error": "401 - Unauthorized"}
     elif status_code == 406:

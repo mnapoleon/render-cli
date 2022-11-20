@@ -21,7 +21,9 @@ pytest-mock = "^3.8.2"
 renderctl="renderctl.console:cli"
 
 [tool.poetry.group.dev.dependencies]
-responses = "^0.21.0"
+mypy = "^0.991"
+responses = "^0.22.0"
+flake8-docstrings = "^1.6.0"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]

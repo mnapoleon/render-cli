@@ -1,3 +1,4 @@
+"""Helpers to format the Render services information."""
 from rich.table import Table
 
 SERVICES_TABLE_TITLE = "SERVICES"
@@ -20,6 +21,7 @@ env_vars_columns = [ENV_VARS_NAME_COL_HEADER, ENV_VARS_VALUE_COL_HEADER]
 
 
 def output_services_as_table(data):
+    """Formats the service data as a table using the Rich text library."""
     tb = Table(title=SERVICES_TABLE_TITLE)
     for header in services_columns:
         tb.add_column(header)
@@ -31,6 +33,7 @@ def output_services_as_table(data):
 
 
 def output_env_vars_as_table(data):
+    """Formats service env vars as a table using the Rich text library."""
     tb = Table(title=ENV_VARS_TABLE_TITLE)
     for header in env_vars_columns:
         tb.add_column(header)
