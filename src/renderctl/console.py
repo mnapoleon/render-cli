@@ -12,7 +12,6 @@ from renderctl.output.services_output import (
     output_services_as_table,
 )
 from renderctl.render_services import (
-    deploy_service,
     fetch_services,
     find_service_by_name,
     retrieve_env_from_render,
@@ -123,16 +122,3 @@ def list_env(service_id, service_name, verbose):
         console = Console()
         click.echo("\n")
         console.print(output_env_vars_as_table(data))
-
-
-@cli.command()
-@click.option("-sid", "--service-id", type=str, help="Deploys named service")
-def deploy(service_id):
-    """Will deploy a service to Render...maybe.
-
-    Args:
-        service_id: id of service to deploy.
-
-    """
-    result = deploy_service(service_id)
-    click.echo(json.dumps(result, indent=4))
