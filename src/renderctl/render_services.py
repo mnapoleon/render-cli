@@ -45,6 +45,9 @@ def retrieve_env_from_render(service_name) -> Any:
     Args:
         service_name: name of service to fetch the environment variables for.
 
+    Returns:
+        A list of environment variables for a given service.
+
     """
     url = f"{RENDER_API_BASE_URL}/{service_name}/env-vars?limit=20"
     with requests.get(url, headers=create_headers()) as response:
@@ -65,6 +68,9 @@ def fetch_services(limit=20, cursor=None):
         limit: number of services to fetch. Defaults to 20.
         cursor: indicator passed to Render to fetch next page of results.
 
+    Returns:
+        All services associated with a Render account.
+
     """
     cursor_query_param = f"&cursor={cursor}" if cursor is not None else ""
     url = f"{RENDER_API_BASE_URL}?limit={limit}{cursor_query_param}"
@@ -76,13 +82,6 @@ def fetch_services(limit=20, cursor=None):
             return handle_errors(exc.response.status_code)
 
 
-def deploy_service(service_name):
-    """Will redeploy specified service."""
-    url = f"{RENDER_API_BASE_URL}/{service_name}/deploys"
-    with requests.post(url, headers=create_headers(is_post=True)) as response:
-        return response.json()
-
-
 def find_service_by_name(service_name: str):
     """Finds service by name associated with Render account.
 
@@ -91,6 +90,9 @@ def find_service_by_name(service_name: str):
 
     Args:
         service_name: name of service to search for.
+
+    Returns:
+        Service information for specified service if it exists.
 
     """
     data = fetch_services(limit=50)
