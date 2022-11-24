@@ -7,7 +7,7 @@ import nox
 from nox.sessions import Session
 
 
-locations = "src", "tests", "noxfile.py"
+locations = "src", "tests", "noxfile.py", "docs/conf.py"
 nox.options.sessions = (
     "lint",
     "mypy",
@@ -19,7 +19,7 @@ def install_with_constraints(session: Session, *args: str, **kwargs: Any) -> Non
     """Install packages constrained by Poetry's lock file.
 
     This function is a wrapper for nox.sessions.Session.install. It
-    invokes pip to install packages inside of the session's virtualenv.
+    invokes pip to install packages inside the session's virtualenv.
     Additionally, pip is passed a constraints file generated from
     Poetry's lock file, to ensure that the packages are pinned to the
     versions specified in poetry.lock. This allows you to manage the
@@ -46,7 +46,7 @@ def install_with_constraints(session: Session, *args: str, **kwargs: Any) -> Non
 
 
 @nox.session(python=["3.10"])
-def tests(session):
+def tests(session: Session) -> None:
     """Run the test suite."""
     args = session.posargs or ["--cov", "-m", "not e2e"]
     session.run("poetry", "install", "--no-dev", external=True)
@@ -57,12 +57,13 @@ def tests(session):
 
 
 @nox.session(python=["3.10"])
-def lint(session):
+def lint(session: Session) -> None:
     """Lint using flake8."""
     args = session.posargs or locations
     install_with_constraints(
         session,
         "flake8",
+        "flake8-bandit",
         "flake8-black",
         "flake8-bugbear",
         "flake8-docstrings",
@@ -73,7 +74,7 @@ def lint(session):
 
 
 @nox.session(python=["3.10"])
-def black(session):
+def black(session: Session) -> None:
     """Format code using black."""
     args = session.posargs or locations
     install_with_constraints(session, "black")
@@ -81,8 +82,15 @@ def black(session):
 
 
 @nox.session(python=["3.10"])
-def mypy(session):
+def mypy(session: Session) -> None:
     """Type checking using mypy."""
     args = session.posargs or locations
     install_with_constraints(session, "mypy")
     session.run("mypy", *args)
+
+
+@nox.session(python="3.10")
+def docs(session: Session) -> None:
+    """Build the documentation."""
+    install_with_constraints(session, "sphinx")
+    session.run("sphinx-build", "docs", "docs/_build")

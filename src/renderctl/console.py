@@ -122,3 +122,25 @@ def list_env(service_id, service_name, verbose):
         console = Console()
         click.echo("\n")
         console.print(output_env_vars_as_table(data))
+
+
+def recursive_help(cmd, parent=None):
+    """Helper function to dump the help of a command.
+
+    Args:
+        cmd: command to get help for
+        parent: parent command
+
+    """
+    ctx = click.core.Context(cmd, info_name=cmd.name, parent=parent)
+    print(cmd.get_help(ctx))
+    print()
+    commands = getattr(cmd, "commands", {})
+    for sub in commands.values():
+        recursive_help(sub, ctx)
+
+
+@cli.command("dump-help")
+def dump_help():
+    """Command to dump all help screen."""
+    recursive_help(cli)

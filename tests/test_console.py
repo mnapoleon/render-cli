@@ -12,6 +12,7 @@ def runner():
     return click.testing.CliRunner()
 
 
+@pytest.mark.e2e
 def test_main_succeeds(runner):
     """It exits with a status code of zero."""
     result = runner.invoke(console.cli)
