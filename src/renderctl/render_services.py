@@ -7,9 +7,9 @@ import requests
 from requests import HTTPError
 
 
-RENDER_API_BASE_URL = "https://api.render.com/v1/services"
+RENDER_API_BASE_URL: str = "https://api.render.com/v1/services"
 
-APPLICATION_JSON = "application/json"
+APPLICATION_JSON: str = "application/json"
 
 
 def get_bearer_token() -> Optional[str]:
@@ -22,7 +22,7 @@ def get_bearer_token() -> Optional[str]:
     return os.getenv("RENDER_TOKEN")
 
 
-def create_headers(is_post: bool = False):
+def create_headers(is_post: bool = False) -> dict[str, str]:
     """Helper function to create headers for api call.
 
     Args:
@@ -58,7 +58,7 @@ def retrieve_env_from_render(service_name) -> Any:
             return handle_errors(exc.response.status_code)
 
 
-def fetch_services(limit=20, cursor=None):
+def fetch_services(limit=20, cursor=None) -> Any:
     """Gets services associated with Render account.
 
     This function will fetch all services, upto specified limit
@@ -82,7 +82,7 @@ def fetch_services(limit=20, cursor=None):
             return handle_errors(exc.response.status_code)
 
 
-def find_service_by_name(service_name: str):
+def find_service_by_name(service_name: str) -> Any:
     """Finds service by name associated with Render account.
 
     This function will fetch services from Redner and return the
@@ -115,7 +115,7 @@ def find_service_by_name(service_name: str):
     return resulting_service
 
 
-def handle_errors(status_code):
+def handle_errors(status_code) -> dict[str, str]:
     """Helper function to handle errors from the api."""
     if status_code == 401:
         return {"error": "401 - Unauthorized"}

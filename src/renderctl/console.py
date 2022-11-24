@@ -66,7 +66,7 @@ def find_service(service_name) -> Any:
 
 @cli.command("set-env")
 @click.option("-f", "--file", type=str, help="File to load env vars from")
-def set_env(file):
+def set_env(file) -> Any:
     """Will set environment variables for the specified service.
 
     Args:
@@ -95,7 +95,7 @@ def set_env(file):
     is_flag=True,
     help="Display full json output from render api call.",
 )
-def list_env(service_id, service_name, verbose):
+def list_env(service_id, service_name, verbose) -> Any:
     """Fetches list of environment variables of a service.
 
     Returns and lists the environment variables associated with
@@ -124,7 +124,7 @@ def list_env(service_id, service_name, verbose):
         console.print(output_env_vars_as_table(data))
 
 
-def recursive_help(cmd, parent=None):
+def recursive_help(cmd, parent=None) -> None:
     """Helper function to dump the help of a command.
 
     Args:
@@ -141,6 +141,6 @@ def recursive_help(cmd, parent=None):
 
 
 @cli.command("dump-help")
-def dump_help():
+def dump_help() -> None:
     """Command to dump all help screen."""
     recursive_help(cli)
