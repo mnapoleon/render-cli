@@ -9,6 +9,14 @@ To install the renderctl package, run this command in your terminal
 
     $ pip install renderctl
 
+Setup
+-----
+You will need to get an environment variable to your Render API key in order to use the cli
+ .. code-block:: console
+
+    $ export RENDER_TOKEN=<api-token>
+
+This token can you created in your Render Account Settings -> Api Keys.
 
 Usage
 -----
