@@ -45,7 +45,7 @@ def install_with_constraints(session: Session, *args: str, **kwargs: Any) -> Non
         session.install("-r", f"{requirements.name}", *args, **kwargs)
 
 
-@nox.session(python=["3.10", "3.9"])
+@nox.session(python=["3.11", "3.10", "3.9"])
 def tests(session: Session) -> None:
     """Run the test suite."""
     args = session.posargs or ["--cov", "-m", "not e2e"]
@@ -56,7 +56,7 @@ def tests(session: Session) -> None:
     session.run("pytest", *args)
 
 
-@nox.session(python=["3.10"])
+@nox.session(python=["3.11", "3.10", "3.9"])
 def lint(session: Session) -> None:
     """Lint using flake8."""
     args = session.posargs or locations
@@ -73,7 +73,7 @@ def lint(session: Session) -> None:
     session.run("flake8", *args)
 
 
-@nox.session(python=["3.10"])
+@nox.session(python=["3.11"])
 def black(session: Session) -> None:
     """Format code using black."""
     args = session.posargs or locations
@@ -81,7 +81,7 @@ def black(session: Session) -> None:
     session.run("black", *args)
 
 
-@nox.session(python=["3.10"])
+@nox.session(python=["3.11", "3.10", "3.9"])
 def mypy(session: Session) -> None:
     """Type checking using mypy."""
     args = session.posargs or locations
@@ -89,7 +89,7 @@ def mypy(session: Session) -> None:
     session.run("mypy", *args)
 
 
-@nox.session(python="3.10")
+@nox.session(python="3.11")
 def docs(session: Session) -> None:
     """Build the documentation."""
     install_with_constraints(session, "sphinx")
