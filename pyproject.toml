@@ -25,6 +25,7 @@ mypy = "^0.991"
 responses = "^0.22.0"
 flake8-docstrings = "^1.6.0"
 darglint = "^1.8.1"
+Sphinx = "^5.3.0"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
