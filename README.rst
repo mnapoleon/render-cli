@@ -1,6 +1,9 @@
 renderctl
 =========
 
+.. |Tests| image:: https://github.com/mnapoleon/renderctl/workflows/Tests/badge.svg
+    :target: https://github.com/mnapoleon/renderctl/actions?workflow=Tests
+
 Installation
 ------------
 To install the renderctl package, run this command in your terminal
