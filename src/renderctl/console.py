@@ -15,6 +15,7 @@ from renderctl.render_services import (
     fetch_services,
     find_service_by_name,
     retrieve_env_from_render,
+    set_env_variables_for_service,
 )
 from . import __version__
 
@@ -66,14 +67,19 @@ def find_service(service_name) -> Any:
 
 @cli.command("set-env")
 @click.option("-f", "--file", type=str, help="File to load env vars from")
-def set_env(file) -> Any:
+@click.option("-sn", "--service-name", type=str, help="Render service name")
+def set_env(file, service_name) -> Any:
     """Will set environment variables for the specified service.
+
+    This is completely replace all environment variables for a
+    service with those provided here.
 
     Args:
         file: path to file containing the environment variables to set.
+        service_name: name of service to set env vars for.
 
     """
-    env_vars = {}
+    env_vars = []
     with open(file) as f:
         for line in f:
             line = line.strip()
@@ -81,9 +87,8 @@ def set_env(file) -> Any:
                 continue
             else:
                 var, value = line.split("=")
-                env_vars[var.strip()] = value.strip()
-    for k, v in env_vars.items():
-        click.echo(f"{k} = {v}")
+                env_vars.append({"key": var.strip(), "value": value.strip()})
+    set_env_variables_for_service(service_name, env_vars)
 
 
 @cli.command("list-env")

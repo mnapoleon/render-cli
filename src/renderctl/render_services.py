@@ -58,6 +58,28 @@ def retrieve_env_from_render(service_name) -> Any:
             return handle_errors(exc.response.status_code)
 
 
+def set_env_variables_for_service(service_name: str, env_vars) -> Any:
+    """Sets the environment variables for the specified service.
+
+    Args:
+        service_name: name of service to set env vars for.
+        env_vars: list of environment variables
+
+    Returns:
+        nothing
+
+    """
+    service_id = find_service_by_name(service_name)["service"]["id"]
+    url = f"{RENDER_API_BASE_URL}/{service_id}/env-vars"
+    payload = env_vars
+    with requests.put(url, headers=create_headers(True), json=payload) as response:
+        try:
+            response.raise_for_status()
+            return response.json()
+        except HTTPError as exc:
+            return handle_errors(exc.response.status_code)
+
+
 def fetch_services(limit=20, cursor=None) -> Any:
     """Gets services associated with Render account.
 
