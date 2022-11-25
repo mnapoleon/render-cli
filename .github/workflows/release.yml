@@ -17,5 +17,5 @@ jobs:
     - run: nox
     - run: poetry build
     - run: poetry config repositories.test-pypi https://test.pypi.org/legacy/
-    - run: poetry publish -r test-pypi --username=__token__ --password=${{ secrete.TESTPYPI_TOKEN }}
+    - run: poetry publish -r test-pypi --username=__token__ --password=${{ secret.TESTPYPI_TOKEN }}
     #- run: poetry publish --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
