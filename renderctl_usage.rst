@@ -52,9 +52,11 @@ Usage: cli list [OPTIONS]
 
   Returns a list of all services associated with your Render account.
 
-  Args:     verbose: option to return a formatted json dump of all services
-  instead of the default table view which just displays the         service
-  name, service id and service url.
+  Args:
+    verbose:
+        option to return a formatted json dump of all services
+        instead of the default table view which just displays the         service
+        name, service id and service url.
 
 Options:
   -v, --verbose  Display full json output from render api call.
@@ -70,7 +72,9 @@ Usage: cli find-service [OPTIONS]
 
   Returns information about service if found.
 
-  Args:     service_name: name of service to search for.
+  Args:
+    service_name:
+        name of service to search for.
 
 Options:
   -sn, --service-name TEXT  Find service by name
@@ -84,10 +88,16 @@ Usage: cli set-env [OPTIONS]
 
   Will set environment variables for the specified service.
 
-  Args:     file: path to file containing the environment variables to set.
+  Args:
+    file:
+        path to file containing the environment variables to set.
+    service_name:
+        name of service to set env vars for.
+
 
 Options:
   -f, --file TEXT  File to load env vars from
+  -sn, --service-name TEXT  Render service name
   --help           Show this message and exit.
 
 ========
@@ -101,10 +111,15 @@ Usage: cli list-env [OPTIONS]
   Returns and lists the environment variables associated with     the passed
   in service id or service name.  Verbose mode     will display json.
 
-  Args:     service_id: id of service whose environment variables to find.
-  service_name: name of service whose environment variables to find.
-  verbose: option to return a formatted json dump of all environment
-  variable information.
+  Args:
+    service_id:
+        id of service whose environment variables to find.
+
+    service_name:
+        name of service whose environment variables to find.
+    verbose:
+        option to return a formatted json dump of all environment
+        variable information.
 
 Options:
   -sid, --service-id TEXT   Render service id
