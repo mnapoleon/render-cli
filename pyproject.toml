@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "renderctl"
-version = "0.1.0"
+version = "0.1.0ba"
 description = "Render CLI"
 authors = ["michaelnapoloen <michael.napoleon@gmail.com>"]
 
