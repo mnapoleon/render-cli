@@ -1,0 +1,21 @@
+# .github/workflows/release.yml
+name: Release-Test
+on:
+  release:
+    types: [published]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        architecture: x64
+    - run: pip install nox==2022.11.21
+    - run: pip install poetry==1.2.0
+    - run: nox
+    - run: poetry build
+    - run: poetry config repositories.test-pypi https://test.pypi.org/legacy/
+    - run: poetry publish -r test-pypi --username=__token__ --password=${{ secrete.TESTPYPI_TOKEN }}
+    #- run: poetry publish --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
