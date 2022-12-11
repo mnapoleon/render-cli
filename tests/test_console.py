@@ -3,7 +3,7 @@ import click.testing
 import pytest
 
 
-from renderctl import console
+from render_cli import console
 
 
 @pytest.fixture

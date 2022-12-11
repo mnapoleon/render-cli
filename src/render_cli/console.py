@@ -7,11 +7,11 @@ import click
 from rich.console import Console
 
 
-from renderctl.output.services_output import (
+from render_cli.output.services_output import (
     output_env_vars_as_table,
     output_services_as_table,
 )
-from renderctl.render_services import (
+from render_cli.render_services import (
     fetch_services,
     find_service_by_name,
     retrieve_env_from_render,
