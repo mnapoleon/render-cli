@@ -1,7 +1,9 @@
 [tool.poetry]
 name = "render-cli"
 version = "0.1.0-alpha"
-description = "Render CLI"
+description = "Render CLI - a command line interface for use with Render (https://render.com/)"
+license = "MIT"
+readme = "README.md"
 authors = ["michaelnapoloen <michael.napoleon@gmail.com>"]
 
 [tool.poetry.dependencies]
