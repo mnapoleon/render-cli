@@ -2,7 +2,7 @@
 import responses
 
 
-from renderctl.render_services import RENDER_API_BASE_URL
+from render_cli.render_services import RENDER_API_BASE_URL
 
 
 test_svc_1 = {

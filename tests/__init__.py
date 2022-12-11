@@ -1,1 +1,1 @@
-"""Test suite for renderctl package."""
+"""Test suite for render-cli package."""

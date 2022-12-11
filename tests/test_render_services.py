@@ -4,7 +4,7 @@ from unittest.mock import patch
 import pytest
 import responses
 
-from renderctl.render_services import (
+from render_cli.render_services import (
     create_headers,
     fetch_services,
     find_service_by_name,
@@ -95,7 +95,7 @@ class TestRenderServices:
         result = retrieve_env_from_render("service-id")
         print(result)
 
-    @patch("renderctl.render_services.os")
+    @patch("render_cli.render_services.os")
     def test_create_headers(self, mock_os):
         """Test to verify the create_headers helper function."""
         mock_os.getenv.return_value = "mock_token_1234"
@@ -109,7 +109,7 @@ class TestRenderServices:
         assert headers_for_post["Content-Type"] == "application/json"
         assert headers_for_post["Authorization"] == "Bearer mock_token_1234"
 
-    @patch("renderctl.render_services.os")
+    @patch("render_cli.render_services.os")
     def test_get_bearer_token(self, mock_os):
         """Test case for getting Render api token from env vars."""
         mock_os.getenv.return_value = None

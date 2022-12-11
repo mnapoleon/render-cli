@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "renderctl"
+name = "render-cli"
 version = "0.1.0-alpha"
 description = "Render CLI"
 authors = ["michaelnapoloen <michael.napoleon@gmail.com>"]
@@ -18,7 +18,7 @@ pytest-cov = "^3.0.0"
 pytest-mock = "^3.8.2"
 
 [tool.poetry.scripts]
-renderctl="renderctl.console:cli"
+render-cli="render_cli.console:cli"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^0.991"
@@ -33,7 +33,7 @@ source = ["src", "*/site-packages"]
 
 [tool.coverage.run]
 branch = true
-source = ["renderctl"]
+source = ["render_cli"]
 
 [tool.coverage.report]
 show_missing = true
