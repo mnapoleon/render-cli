@@ -20,4 +20,4 @@ jobs:
         poetry version $version.dev.$(date +%s)
     - run: poetry build
     - run: poetry config repositories.test-pypi https://test.pypi.org/legacy/
-    - run: poetry publish --username=__token__ --password=${{ secrets.TESTPYPI_TOKEN }}
+    - run: poetry publish -r test-pypi --username=__token__ --password=${{ secrets.TESTPYPI_TOKEN }}
