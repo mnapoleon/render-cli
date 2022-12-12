@@ -128,3 +128,9 @@ Usage: `cli dump-help [OPTIONS]`
   Options:
     
     --help  Show this message and exit.
+    
+***
+
+#### Unsupported Operations at this time
+- Create services with CLI. (https://api-docs.render.com/reference/create-service)
+- Deploy services with CLI.  (https://api-docs.render.com/reference/create-deploy)
