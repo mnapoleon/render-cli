@@ -53,16 +53,30 @@ def list_services(verbose) -> Any:
 
 @cli.command("find-service")
 @click.option("-sn", "--service-name", type=str, help="Find service by name")
-def find_service(service_name) -> Any:
+@click.option(
+    "-v",
+    "--verbose",
+    is_flag=True,
+    help="Display full json output from render api call.",
+)
+def find_service(service_name, verbose) -> Any:
     """Finds a Render service by name.
 
     Returns information about service if found.
 
     Args:
         service_name: name of service to search for.
+        verbose: option to return a formatted json dump of all services
+            instead of the default table view which just displays the
+            service name, service id and service url.
     """
     data = find_service_by_name(service_name)
-    click.echo(json.dumps(data, indent=4))
+    if verbose:
+        click.echo(json.dumps(data, indent=4))
+    else:
+        console = Console()
+        click.echo("\n")
+        console.print(output_services_as_table([data]))
 
 
 @cli.command("set-env")
