@@ -61,6 +61,8 @@ Options:
     -v, --verbose  Display full json output from render api call.
     --help         Show this message and exit.
 
+![list services!](./assets/list_services.gif "list services")
+
 ***
 
 ### find-service
@@ -75,6 +77,8 @@ Options:
     
     -sn, --service-name TEXT  Find service by name
     --help                    Show this message and exit.
+
+![find servicw!](./assets/find_service.gif "find service")
 
 ***
 
@@ -95,7 +99,10 @@ Usage: `cli list-env [OPTIONS]`
       -v, --verbose             Display full json output from render api call.
       --help                    Show this message and exit.
 
+![list env!](./assets/list_env.gif "list env")
+
 ***
+
 ### set-env
 
 Usage: `cli set-env [OPTIONS]`
@@ -104,10 +111,11 @@ Usage: `cli set-env [OPTIONS]`
 
 Options:
 
-  -f, --file TEXT  File to load env vars from
-  -sn, --service-name TEXT  Render service name
-  --help           Show this message and exit.
+    -f, --file TEXT  File to load env vars from
+    -sn, --service-name TEXT  Render service name
+    --help           Show this message and exit.
 
+![set_envs!](./assets/set_envs.gif "set envs")
 
 ***
 
