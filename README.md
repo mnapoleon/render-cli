@@ -111,9 +111,9 @@ Usage: `cli set-env [OPTIONS]`
 
 Options:
 
-  -f, --file TEXT  File to load env vars from
-  -sn, --service-name TEXT  Render service name
-  --help           Show this message and exit.
+    -f, --file TEXT  File to load env vars from
+    -sn, --service-name TEXT  Render service name
+    --help           Show this message and exit.
 
 ![set_envs!](./assets/set_envs.gif "set envs")
 
