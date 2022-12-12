@@ -19,9 +19,5 @@ jobs:
         version=$(poetry version | awk '{print $2}') &&
         poetry version $version.dev.$(date +%s)
     - run: poetry build
-    - uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        user: __token__
-        password: ${{ secrets.TESTPYPI_TOKEN }}
-        repository_url: https://test.pypi.org/legacy/
-        verbose: true
+    - run: poetry config repositories.test-pypi https://test.pypi.org/legacy/
+    - run: poetry publish --username=__token__ --password=${{ secrets.TESTPYPI_TOKEN }}
