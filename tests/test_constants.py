@@ -111,3 +111,10 @@ retrieve_env_vars_failed_with_401 = responses.Response(
     url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
     status=401,
 )
+
+test_env_var_key_pairs = [
+    {"key": "key1", "value": "value1"},
+    {"key": "key2", "value": "value2"},
+    {"key": "key3", "value": "value3"},
+    {"key": "key4", "value": "value4"},
+]

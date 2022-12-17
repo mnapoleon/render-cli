@@ -11,6 +11,7 @@ from render_cli.output.services_output import (
     output_env_vars_as_table,
     output_services_as_table,
 )
+from render_cli.utils import convert_env_var_file
 import render_cli.render_services as rs
 from . import __version__
 
@@ -88,15 +89,7 @@ def set_env(file, service_name) -> Any:
         service_name: name of service to set env vars for.
 
     """
-    env_vars = []
-    with open(file) as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            else:
-                var, value = line.split("=")
-                env_vars.append({"key": var.strip(), "value": value.strip()})
+    env_vars = convert_env_var_file(file)
     rs.set_env_variables_for_service(service_name, env_vars)
 
 

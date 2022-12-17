@@ -80,3 +80,14 @@ class TestConsole:
                 console.cli, ["list-env", "-sn", "test-service-name"]
             )
             assert result.exit_code == 0
+
+    def test_set_env_command(self, runner):
+        """Test console cli call to set env vars for a service."""
+        with patch("render_cli.utils") as mock_utils:
+            mock_utils.convert_env_var_file.return_value = (
+                test_constants.test_env_var_key_pairs
+            )
+            with patch("render_cli.console.rs") as mock_render_services:
+                mock_render_services.set_env_variables_for_service.return_value = ""
+                result = runner.invoke(console.cli, ["set-env", "-sn", "test-service-name", "-f", "envfile.txt"])
+                assert result.exit_code == 0
