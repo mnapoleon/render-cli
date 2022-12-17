@@ -1,4 +1,4 @@
-"""Proivdes basic client to the Render API."""
+"""Provides basic client to the Render API."""
 import os
 from typing import Any, Optional
 

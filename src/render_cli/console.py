@@ -11,12 +11,7 @@ from render_cli.output.services_output import (
     output_env_vars_as_table,
     output_services_as_table,
 )
-from render_cli.render_services import (
-    fetch_services,
-    find_service_by_name,
-    retrieve_env_from_render,
-    set_env_variables_for_service,
-)
+import render_cli.render_services as rs
 from . import __version__
 
 
@@ -42,7 +37,7 @@ def list_services(verbose) -> Any:
             instead of the default table view which just displays the
             service name, service id and service url.
     """
-    data = fetch_services()
+    data = rs.fetch_services()
     if verbose:
         click.echo(json.dumps(data, indent=4))
     else:
@@ -70,7 +65,7 @@ def find_service(service_name, verbose) -> Any:
             instead of the default table view which just displays the
             service name, service id and service url.
     """
-    data = find_service_by_name(service_name)
+    data = rs.find_service_by_name(service_name)
     if verbose:
         click.echo(json.dumps(data, indent=4))
     else:
@@ -102,7 +97,7 @@ def set_env(file, service_name) -> Any:
             else:
                 var, value = line.split("=")
                 env_vars.append({"key": var.strip(), "value": value.strip()})
-    set_env_variables_for_service(service_name, env_vars)
+    rs.set_env_variables_for_service(service_name, env_vars)
 
 
 @cli.command("list-env")
@@ -130,11 +125,11 @@ def list_env(service_id, service_name, verbose) -> Any:
     """
     if not service_id:
         if service_name:
-            service_id = find_service_by_name(service_name)["service"]["id"]
+            service_id = rs.find_service_by_name(service_name)["service"]["id"]
         else:
             click.echo("Need to provide service id or service name options")
             exit()
-    data = retrieve_env_from_render(service_id)
+    data = rs.retrieve_env_from_render(service_id)
     if verbose:
         click.echo(json.dumps(data, indent=4))
     else:
