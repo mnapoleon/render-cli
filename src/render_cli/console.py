@@ -12,6 +12,11 @@ from render_cli.output.services_output import (
     output_services_as_table,
 )
 import render_cli.render_services as rs
+from render_cli.utils import (
+    convert_env_var_file,
+    convert_from_render_env_format,
+    convert_to_render_env_format,
+)
 from . import __version__
 
 
@@ -77,7 +82,13 @@ def find_service(service_name, verbose) -> Any:
 @cli.command("set-env")
 @click.option("-f", "--file", type=str, help="File to load env vars from")
 @click.option("-sn", "--service-name", type=str, help="Render service name")
-def set_env(file, service_name) -> Any:
+@click.option(
+    "-u",
+    "--update",
+    is_flag=True,
+    help="Will update env vars with those in file rather completely overwrite.",
+)
+def set_env(file: str, service_name: str, update: bool) -> Any:
     """Will set environment variables for the specified service.
 
     This is completely replace all environment variables for a
@@ -86,18 +97,19 @@ def set_env(file, service_name) -> Any:
     Args:
         file: path to file containing the environment variables to set.
         service_name: name of service to set env vars for.
+        update: update flag to indicate update env vars instead of overwrite.
 
     """
-    env_vars = []
-    with open(file) as f:
-        for line in f:
-            line = line.strip()
-            if not line or line.startswith("#"):
-                continue
-            else:
-                var, value = line.split("=")
-                env_vars.append({"key": var.strip(), "value": value.strip()})
-    rs.set_env_variables_for_service(service_name, env_vars)
+    service_id = rs.find_service_by_name(service_name)["service"]["id"]
+    env_vars = convert_env_var_file(file)
+    current_env_vars = (
+        convert_from_render_env_format(rs.retrieve_env_from_render(service_id))
+        if update
+        else {}
+    )
+    rs.set_env_variables_for_service(
+        service_id, convert_to_render_env_format({**current_env_vars, **env_vars})
+    )
 
 
 @cli.command("list-env")

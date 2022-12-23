@@ -1,5 +1,5 @@
 """Test cases for the console module."""
-from unittest.mock import patch
+from unittest.mock import mock_open, patch
 
 import click.testing
 import pytest
@@ -66,7 +66,7 @@ class TestConsole:
                 test_constants.test_svc_1
             )
             mock_render_services.retrieve_env_from_render.return_value = (
-                test_constants.test_env_vars
+                test_constants.test_render_env_vars
             )
 
             # test verbose mode
@@ -80,3 +80,35 @@ class TestConsole:
                 console.cli, ["list-env", "-sn", "test-service-name"]
             )
             assert result.exit_code == 0
+
+    def test_set_env_command(self, runner):
+        """Test console cli call to set env vars for a service."""
+        with patch("os.path.isfile") as mock_isfile:
+            mock_isfile.return_value = True
+            file_data = mock_open(read_data=test_constants.test_file_with_comments)
+            with patch("render_cli.utils.open", file_data):
+                with patch("render_cli.utils") as mock_utils:
+                    mock_utils.convert_env_var_file.return_value = (
+                        test_constants.test_env_vars
+                    )
+                    with patch("render_cli.console.rs") as mock_render_services:
+                        mock_render_services.find_service_by_name.return_value = (
+                            test_constants.test_svc_1
+                        )
+                        mock_render_services.retrieve_env_from_render.return_value = (
+                            test_constants.test_render_env_vars
+                        )
+                        mock_render_services.set_env_variables_for_service.return_value = (
+                            ""
+                        )
+                        result = runner.invoke(
+                            console.cli,
+                            [
+                                "set-env",
+                                "-sn",
+                                "test-service-name",
+                                "-f",
+                                "envfile.txt",
+                            ],
+                        )
+                        assert result.exit_code == 0

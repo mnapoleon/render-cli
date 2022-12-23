@@ -97,12 +97,19 @@ test_env_var_4 = {
     "cursor": "nRitXfSIHIpzaWhhNmdkdjMzYXViODhn",
 }
 
-test_env_vars = [test_env_var_1, test_env_var_2, test_env_var_3, test_env_var_4]
+test_render_env_vars = [test_env_var_1, test_env_var_2, test_env_var_3, test_env_var_4]
+
+test_env_var_dict = {
+    "APP_VER": "deadball-player-generator.pr41",
+    "APP_NAME": "deadball-player-generator",
+    "PYTHON_VERSION": "3.10.6",
+    "TEST_ID": "123456",
+}
 
 retrieve_env_vars_response = responses.Response(
     method="GET",
     url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
-    json=test_env_vars,
+    json=test_render_env_vars,
     status=200,
 )
 
@@ -111,3 +118,16 @@ retrieve_env_vars_failed_with_401 = responses.Response(
     url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
     status=401,
 )
+
+test_env_var_key_pairs = [
+    {"key": "key1", "value": "value1"},
+    {"key": "key2", "value": "value2"},
+    {"key": "key3", "value": "value3"},
+    {"key": "key4", "value": "value4"},
+]
+
+test_env_vars = {"key1": "value1", "key2": "value2", "key3": "value3", "key4": "value4"}
+
+test_file_with_comments = "test1=1\ntest2=2\n#test3=3\ntest4=4"
+
+test_dict_missing_commented_out_row = {"test1": "1", "test2": "2", "test4": "4"}
