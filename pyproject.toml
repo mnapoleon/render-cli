@@ -10,6 +10,7 @@ readme = "README.md"
 
 homepage = "https://github.com/mnapoleon/render-cli"
 repository = "https://github.com/mnapoleon/render-cli"
+documentation = "https://render-cli.readthedocs.io"
 keywords = ["render", "render-cli", "python"]
 
 
