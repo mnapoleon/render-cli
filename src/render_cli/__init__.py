@@ -1,5 +1,5 @@
 """render-cli - The Render Command-line interface."""
+from importlib.metadata import version
 
 
-# src/render_cli/__init__.py
-__version__ = "0.1.1"
+__version__ = version(__name__)
