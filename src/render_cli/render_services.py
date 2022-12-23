@@ -39,17 +39,18 @@ def create_headers(is_post: bool = False) -> dict[str, str]:
     return headers
 
 
-def retrieve_env_from_render(service_name) -> Any:
+def retrieve_env_from_render(service_id: str, limit: int = 20) -> Any:
     """Gets environment variables for the specified service.
 
     Args:
-        service_name: name of service to fetch the environment variables for.
+        service_id: id service to fetch the environment variables for.
+        limit: number of env vars to fetch. Defaults to 20.
 
     Returns:
         A list of environment variables for a given service.
 
     """
-    url = f"{RENDER_API_BASE_URL}/{service_name}/env-vars?limit=20"
+    url = f"{RENDER_API_BASE_URL}/{service_id}/env-vars?limit={limit}"
     with requests.get(url, headers=create_headers()) as response:
         try:
             response.raise_for_status()
@@ -58,18 +59,17 @@ def retrieve_env_from_render(service_name) -> Any:
             return handle_errors(exc.response.status_code)
 
 
-def set_env_variables_for_service(service_name: str, env_vars) -> Any:
+def set_env_variables_for_service(service_id: str, env_vars: list[dict]) -> Any:
     """Sets the environment variables for the specified service.
 
     Args:
-        service_name: name of service to set env vars for.
+        service_id: id of service to set vars for.
         env_vars: list of environment variables
 
     Returns:
         nothing
 
     """
-    service_id = find_service_by_name(service_name)["service"]["id"]
     url = f"{RENDER_API_BASE_URL}/{service_id}/env-vars"
     payload = env_vars
     with requests.put(url, headers=create_headers(True), json=payload) as response:

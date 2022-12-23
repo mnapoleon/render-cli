@@ -66,7 +66,7 @@ class TestConsole:
                 test_constants.test_svc_1
             )
             mock_render_services.retrieve_env_from_render.return_value = (
-                test_constants.test_env_vars
+                test_constants.test_render_env_vars
             )
 
             # test verbose mode
@@ -84,10 +84,17 @@ class TestConsole:
     def test_set_env_command(self, runner):
         """Test console cli call to set env vars for a service."""
         with patch("render_cli.utils") as mock_utils:
-            mock_utils.convert_env_var_file.return_value = (
-                test_constants.test_env_var_key_pairs
-            )
+            mock_utils.convert_env_var_file.return_value = test_constants.test_env_vars
             with patch("render_cli.console.rs") as mock_render_services:
+                mock_render_services.find_service_by_name.return_value = (
+                    test_constants.test_svc_1
+                )
+                mock_render_services.retrieve_env_from_render.return_value = (
+                    test_constants.test_render_env_vars
+                )
                 mock_render_services.set_env_variables_for_service.return_value = ""
-                result = runner.invoke(console.cli, ["set-env", "-sn", "test-service-name", "-f", "envfile.txt"])
+                result = runner.invoke(
+                    console.cli,
+                    ["set-env", "-sn", "test-service-name", "-f", "envfile.txt"],
+                )
                 assert result.exit_code == 0
