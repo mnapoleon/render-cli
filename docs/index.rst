@@ -99,6 +99,7 @@ Usage: cli set-env [OPTIONS]
 
 Options:
   -f, --file TEXT  File to load env vars from
+  -u, --update     update env vars with those in file rather completely overwrite
   --help           Show this message and exit.
 
 =========
