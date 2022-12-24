@@ -11,9 +11,8 @@ def test_convert_env_var_file(mock_isfile):
     mock_isfile.return_value = True
     file_data = mock.mock_open(read_data=test_constants.test_file_with_comments)
     with mock.patch("render_cli.utils.open", file_data):
-        assert (
-            test_constants.test_dict_missing_commented_out_row
-            == utils.convert_env_var_file("any.txt")
+        assert test_constants.test_env_vars_missing_key3 == utils.convert_env_var_file(
+            "any.txt"
         )
 
 
@@ -24,10 +23,8 @@ def test_convert_from_render_env_format():
 
 
 def test_convert_to_render_env_format():
-    """Tests converting dict render env format."""
+    """Tests converting dict to render env format."""
     assert (
-        utils.convert_to_render_env_format(
-            test_constants.test_env_vars,
-        )
-        == test_constants.test_env_var_key_pairs
+        utils.convert_to_render_env_format(test_constants.test_env_vars)
+        == test_constants.test_env_var_render_format
     )

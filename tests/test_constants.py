@@ -1,6 +1,5 @@
-"""Provides test data for mock calls to Render api."""
+"""Provides test data for mock calls to Render api as well as other test data."""
 import responses
-
 
 from render_cli.render_services import RENDER_API_BASE_URL
 
@@ -119,7 +118,7 @@ retrieve_env_vars_failed_with_401 = responses.Response(
     status=401,
 )
 
-test_env_var_key_pairs = [
+test_env_var_render_format = [
     {"key": "key1", "value": "value1"},
     {"key": "key2", "value": "value2"},
     {"key": "key3", "value": "value3"},
@@ -130,4 +129,4 @@ test_env_vars = {"key1": "value1", "key2": "value2", "key3": "value3", "key4": "
 
 test_file_with_comments = "test1=1\ntest2=2\n#test3=3\ntest4=4"
 
-test_dict_missing_commented_out_row = {"test1": "1", "test2": "2", "test4": "4"}
+test_env_vars_missing_key3 = {"test1": "1", "test2": "2", "test4": "4"}
