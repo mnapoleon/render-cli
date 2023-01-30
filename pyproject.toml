@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "render-cli"
-version = "0.2.0"
+version = "0.2.1"
 description = "Render CLI - a command line interface for use with Render https://render.com/"
 authors = ["michaelnapoloen <michael.napoleon@gmail.com>"]
 

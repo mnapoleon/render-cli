@@ -20,7 +20,10 @@ class TestRenderServices:
     @pytest.fixture(scope="class")
     def fetch_services_response(self):
         """Fixture for fetching services."""
-        return test_constants.fetch_services_response
+        return [
+            test_constants.fetch_services_response,
+            test_constants.fetch_services_response_short,
+        ]
 
     @pytest.fixture(scope="class")
     def fetch_services_failed_responses(self):
@@ -37,7 +40,10 @@ class TestRenderServices:
     @pytest.fixture(scope="class")
     def retrieve_env_vars_response(self):
         """Fixture for environment variable fetch tests."""
-        return test_constants.retrieve_env_vars_response
+        return [
+            test_constants.retrieve_env_vars_response,
+            test_constants.retrieve_env_vars_response_short,
+        ]
 
     @pytest.fixture(scope="class")
     def env_vars_failed_response(self):
@@ -47,9 +53,11 @@ class TestRenderServices:
     @responses.activate
     def test_fetch_services(self, fetch_services_response):
         """Test case for fetching services."""
-        responses.add(fetch_services_response)
+        for rsp in fetch_services_response:
+            responses.add(rsp)
 
-        result = fetch_services()
+        result = fetch_services(limit=3)
+        assert len(result) == 4
         s_id = result[0]["service"]["id"]
         assert "srv-cc3vjrhgp3jqnl0xxxxx" == s_id
 
@@ -74,15 +82,18 @@ class TestRenderServices:
     @responses.activate
     def test_find_service_by_name(self, fetch_services_response):
         """Test case for findig service by name."""
-        responses.add(fetch_services_response)
+        for rsp in fetch_services_response:
+            responses.add(rsp)
         result = find_service_by_name("render-service-name-1")
         assert result == test_constants.test_svc_1
 
     @responses.activate
     def test_retrieve_env_from_render(self, retrieve_env_vars_response):
         """Test case for retrieving env vars for a service."""
-        responses.add(retrieve_env_vars_response)
-        result = retrieve_env_from_render("service-id")
+        for rsp in retrieve_env_vars_response:
+            responses.add(rsp)
+        result = retrieve_env_from_render("service-id", limit=4)
+        assert len(result) == 6
         assert result[0] == test_constants.test_env_var_1
         assert result[1] == test_constants.test_env_var_2
         assert result[2] == test_constants.test_env_var_3
