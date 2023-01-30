@@ -142,7 +142,6 @@ def find_service_by_name(service_name: str) -> Any:
     while True:
         for svc_listing in data:
             service = svc_listing["service"]
-            cursor = svc_listing["cursor"]
             if service["name"] == service_name:
                 resulting_service = svc_listing
                 found = True
