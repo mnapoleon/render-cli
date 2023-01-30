@@ -136,10 +136,9 @@ def find_service_by_name(service_name: str) -> Any:
         Service information for specified service if it exists.
 
     """
-    data = fetch_services(limit=50)
+    data = fetch_services()
     found = False
     resulting_service = None
-    cursor = None
     while True:
         for svc_listing in data:
             service = svc_listing["service"]
@@ -149,9 +148,6 @@ def find_service_by_name(service_name: str) -> Any:
                 found = True
                 break
         if found:
-            break
-        data = fetch_services(cursor=cursor)
-        if len(data) == 0:
             break
     return resulting_service
 
