@@ -2,10 +2,8 @@
 import json
 from typing import Any
 
-
 import click
 from rich.console import Console
-
 
 from render_cli.output.services_output import (
     output_env_vars_as_table,
@@ -17,7 +15,10 @@ from render_cli.utils import (
     convert_from_render_env_format,
     convert_to_render_env_format,
 )
-from . import __version__
+
+# from . import __version__
+
+__version__ = "3.0"
 
 
 @click.group()

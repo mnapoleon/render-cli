@@ -40,6 +40,10 @@ fetch_services_response = responses.Response(
     status=200,
 )
 
+fetch_services_response_short = responses.Response(
+    method="GET", url=RENDER_API_BASE_URL, json=test_services[0:1], status=200
+)
+
 fetch_services_failed_with_401 = responses.Response(
     method="GET",
     url=RENDER_API_BASE_URL,
@@ -109,6 +113,13 @@ retrieve_env_vars_response = responses.Response(
     method="GET",
     url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
     json=test_render_env_vars,
+    status=200,
+)
+
+retrieve_env_vars_response_short = responses.Response(
+    method="GET",
+    url=f"{RENDER_API_BASE_URL}/service-id/env-vars",
+    json=test_render_env_vars[0:2],
     status=200,
 )
 

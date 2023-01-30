@@ -50,13 +50,23 @@ def retrieve_env_from_render(service_id: str, limit: int = 20) -> Any:
         A list of environment variables for a given service.
 
     """
-    url = f"{RENDER_API_BASE_URL}/{service_id}/env-vars?limit={limit}"
-    with requests.get(url, headers=create_headers()) as response:
-        try:
-            response.raise_for_status()
-            return response.json()
-        except HTTPError as exc:
-            return handle_errors(exc.response.status_code)
+    initial_url = f"{RENDER_API_BASE_URL}/{service_id}/env-vars?limit={limit}"
+    url = initial_url
+    services = []
+    while url != "":
+        with requests.get(url, headers=create_headers()) as response:
+            try:
+                response.raise_for_status()
+                r = response.json()
+                services.extend(r)
+                if len(r) == limit:
+                    last_cursor = r[-1]["cursor"]
+                    url = f"{initial_url}&cursor={last_cursor}"
+                else:
+                    url = ""
+            except HTTPError as exc:
+                return handle_errors(exc.response.status_code)
+    return services
 
 
 def set_env_variables_for_service(service_id: str, env_vars: list[dict]) -> Any:
@@ -96,12 +106,21 @@ def fetch_services(limit=20, cursor=None) -> Any:
     """
     cursor_query_param = f"&cursor={cursor}" if cursor is not None else ""
     url = f"{RENDER_API_BASE_URL}?limit={limit}{cursor_query_param}"
-    with requests.get(url, headers=create_headers()) as response:
-        try:
-            response.raise_for_status()
-            return response.json()
-        except HTTPError as exc:
-            return handle_errors(exc.response.status_code)
+    services = []
+    while url != "":
+        with requests.get(url, headers=create_headers()) as response:
+            try:
+                response.raise_for_status()
+                r = response.json()
+                services.extend(r)
+                if len(r) == limit:
+                    last_cursor = r[-1]["cursor"]
+                    url = f"{RENDER_API_BASE_URL}?limit={limit}&cursor={last_cursor}"
+                else:
+                    url = ""
+            except HTTPError as exc:
+                return handle_errors(exc.response.status_code)
+    return services
 
 
 def find_service_by_name(service_name: str) -> Any:
