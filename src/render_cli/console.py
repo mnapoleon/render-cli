@@ -15,10 +15,7 @@ from render_cli.utils import (
     convert_from_render_env_format,
     convert_to_render_env_format,
 )
-
-# from . import __version__
-
-__version__ = "3.0"
+from . import __version__
 
 
 @click.group()
